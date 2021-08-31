@@ -28,6 +28,8 @@ int tetrahedralization(GEO::Mesh&       sf_mesh,
                        Parameters       params,
                        Eigen::MatrixXd& V,
                        Eigen::MatrixXi& T,
+                       Eigen::MatrixXd& V_sf,
+                       Eigen::MatrixXi& F_sf,
                        int              boolean_op,
                        bool             skip_simplify)
 {
@@ -188,6 +190,13 @@ int tetrahedralization(GEO::Mesh&       sf_mesh,
     if (!params.envelope_log.empty()) {
         std::ofstream fout(params.envelope_log);
         fout << envelope_log_csv;
+    }
+
+    if (params.manifold_surface) {
+        manifold_surface(mesh, V_sf, F_sf);
+    }
+    else {
+        get_surface(mesh, V_sf, F_sf);
     }
 
     return 0;
